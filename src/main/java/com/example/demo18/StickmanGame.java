@@ -30,6 +30,8 @@ public class StickmanGame extends Application {
     boolean stickSpawned = false;
     boolean isWalking = false;
 
+    boolean growingInProgress;
+
     Scene scene;
 
 
@@ -74,21 +76,24 @@ public class StickmanGame extends Application {
 
     private void startGameLoop() {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.SPACE && !stickSpawned) {
+            if (event.getCode() == KeyCode.SPACE && !stickSpawned && !growingInProgress) {
                 startGrowingStick();
                 stickSpawned = true;
+                growingInProgress = false;
             }
         });
 
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.SPACE) {
+            if (event.getCode() == KeyCode.SPACE && !growingInProgress) {
                 stopGrowingStick(platform, this);
+                growingInProgress=true;
             }
             startGameLoop();
         });
+
     }
 
-    private void gameloop() {
+    /*private void gameloop() {
         Timeline gameLoopTimeline = new Timeline(
                 new KeyFrame(Duration.millis(10), e -> {
                     if (isWalking && !stickman.isWalking()) {
@@ -101,7 +106,7 @@ public class StickmanGame extends Application {
         );
         gameLoopTimeline.setCycleCount(Timeline.INDEFINITE);
         gameLoopTimeline.play();
-    }
+    }*/
 
     private void startGrowingStick() {
         stickman.startGrowing();

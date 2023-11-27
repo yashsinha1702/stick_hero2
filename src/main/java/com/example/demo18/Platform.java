@@ -130,7 +130,7 @@ public class Platform {
         this.count+=1;
         stickmangame.stickSpawned = false;
         stickmangame.isWalking = false;
-        stickmangame.stickman.resetPosition(stickmangame.platform);
+        stickmangame.stickman.resetPosition(stickmangame.platform,stickmangame);
         platform_distance = root.getWidth() * ((newrect.get(0) / 100) - 0.1);
     }
 

@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.RotateEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -44,6 +45,8 @@ public class Stickman {
     private Timeline fallingTimeline;
 
     private Timeline rotatingTimeline;
+
+    boolean reverse=false;
 
     private boolean isrotating;
 
@@ -122,7 +125,25 @@ public class Stickman {
     public void startWalking(Platform platform, StickmanGame stickmangame) {
         if (walkingTimeline == null || !walkingTimeline.getStatus().equals(Animation.Status.RUNNING)) {
             walkingTimeline = new Timeline(
-                    new KeyFrame(Duration.millis(10), e -> walkStickman(platform, stickmangame))
+                    new KeyFrame(Duration.millis(10), e -> {
+                        stickmangame.scene.setOnKeyPressed(event -> {
+                            if (event.getCode() == KeyCode.SPACE) {
+                                reverse = !reverse; // Toggle the direction
+
+                                if (reverse) {
+                                    stickman.setRotate(180);
+                                    stickman.setLayoutY(stickman.getLayoutY() + 60); // Move down
+                                } else {
+                                    stickman.setRotate(0); // Assuming the original rotation is 0
+                                    stickman.setLayoutY(stickman.getLayoutY() - 60); // Move up
+                                }
+                            }
+                        });
+
+                        // Request focus to receive key events
+                        stickman.requestFocus();
+                        walkStickman(platform, stickmangame);
+                    })
             );
             walkingTimeline.setCycleCount(Timeline.INDEFINITE);
             walkingTimeline.play();
@@ -200,13 +221,13 @@ public class Stickman {
     }
 
 
-    public void resetPosition(Platform platform) {
+    public void resetPosition(Platform platform,StickmanGame stickmanGame) {
 
         isWalking = false;
         stickHeight = 0;
         stickmanX=0;
         stick.setEndY(root.getHeight() - PLATFORM_HEIGHT - stickHeight);
-
+        stickmanGame.growingInProgress=false;
         root.getChildren().remove(stick);
     }
 
