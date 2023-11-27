@@ -40,7 +40,7 @@ public class StickmanGame extends Application {
     @Override
     public void start(Stage primaryStage) {
         root = new AnchorPane();
-        scene = new Scene(root, 800, 400);
+        scene = new Scene(root, 800, 600);
 
         initializePlatform();
         initializeStickman();
@@ -85,8 +85,8 @@ public class StickmanGame extends Application {
 
         scene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.SPACE && !growingInProgress) {
-                stopGrowingStick(platform, this);
                 growingInProgress=true;
+                stopGrowingStick(platform, this);
             }
             startGameLoop();
         });

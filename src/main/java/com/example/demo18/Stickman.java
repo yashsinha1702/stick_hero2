@@ -48,6 +48,8 @@ public class Stickman {
 
     boolean reverse=false;
 
+    boolean isreversible=false;
+
     private boolean isrotating;
 
     private double positionX=0,positionY=0;
@@ -123,11 +125,12 @@ public class Stickman {
     }
 
     public void startWalking(Platform platform, StickmanGame stickmangame) {
+        this.isreversible=true;
         if (walkingTimeline == null || !walkingTimeline.getStatus().equals(Animation.Status.RUNNING)) {
             walkingTimeline = new Timeline(
                     new KeyFrame(Duration.millis(10), e -> {
-                        stickmangame.scene.setOnKeyPressed(event -> {
-                            if (event.getCode() == KeyCode.SPACE) {
+                        stickmangame.stickman.stickman.setOnKeyPressed(event -> {
+                            if (event.getCode() == KeyCode.SPACE && isreversible && isWalking) {
                                 reverse = !reverse; // Toggle the direction
 
                                 if (reverse) {
@@ -139,14 +142,13 @@ public class Stickman {
                                 }
                             }
                         });
-
-                        // Request focus to receive key events
                         stickman.requestFocus();
                         walkStickman(platform, stickmangame);
                     })
             );
             walkingTimeline.setCycleCount(Timeline.INDEFINITE);
             walkingTimeline.play();
+
         }
     }
 
@@ -157,6 +159,7 @@ public class Stickman {
                     isWalking=false;
                     walkingTimeline.pause();
                     stickmanfall(platform,stickmangame);
+                    isreversible=false;
                 } else {
                     stickmanX += 1;
                     stickman.setTranslateX(stickmanX);
@@ -167,6 +170,7 @@ public class Stickman {
                     }
                     if (stickmanX >= (root.getWidth() * (Platform.newrect.get(0)) / 100)) {
                         isWalking = false;
+                        isreversible=false;
                         walkingTimeline.pause();
                         platform.nextPlatform(stickmangame);
                         //stickman.setTranslateX(-1 * (stick.getEndX() - stick.getStartX()));
@@ -178,6 +182,7 @@ public class Stickman {
             if (isWalking) {
                 if (stickmanX > stickHeight+STICKMAN_SIZE && stickHeight < platform_distance) {
                     isWalking=false;
+                    isreversible=false;
                     walkingTimeline.pause();
                     stickmanfall(platform,stickmangame);
                 } else {
@@ -190,6 +195,7 @@ public class Stickman {
                     }
                     if (stickmanX >= (root.getWidth() * (Platform.newrect.get(0)) / 100)) {
                         isWalking = false;
+                        isreversible=false;
                         walkingTimeline.pause();
                         platform.nextPlatform(stickmangame);
                         //stickman.setTranslateX(-1 * (stick.getEndX() - stick.getStartX()));
@@ -229,6 +235,7 @@ public class Stickman {
         stick.setEndY(root.getHeight() - PLATFORM_HEIGHT - stickHeight);
         stickmanGame.growingInProgress=false;
         root.getChildren().remove(stick);
+        stickmanGame.growingInProgress=false;
     }
 
     public boolean isWalking() {
