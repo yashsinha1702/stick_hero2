@@ -1,4 +1,4 @@
-package com.example.demo18;
+package com.example.demogame;
 
 import javafx.animation.TranslateTransition;
 import javafx.scene.layout.Pane;
@@ -30,14 +30,14 @@ public class Platform {
         int random1 = -1;
         int random2 = -2;
         while (random1 > random2) {
-            random1 = rand.nextInt(11, 100);
-            random2 = rand.nextInt(11, random1 + 6);
+            random1 = rand.nextInt(11, 40);
+            random2 = rand.nextInt(random1+6, random1 + 20);
         }
         newrect.add((double) random1);
         newrect.add((double) random2);
         oldRectangle = new Rectangle(0, root.getHeight() - PLATFORM_HEIGHT, root.getWidth() * (0.1), root.getHeight() - PLATFORM_HEIGHT);
         root.getChildren().add(oldRectangle);
-        newRectangle = new Rectangle(root.getWidth() * ((double) random1 / 100), root.getHeight() - PLATFORM_HEIGHT, root.getWidth() * ((double) random2 / 100), root.getHeight() - PLATFORM_HEIGHT);
+        newRectangle = new Rectangle(root.getWidth() * ((double) random1 / 100), root.getHeight() - PLATFORM_HEIGHT, root.getWidth() * (((double) random2 - (double) random1)/ 100), root.getHeight() - PLATFORM_HEIGHT);
         root.getChildren().add(newRectangle);
         platform_distance = root.getWidth() * ((newrect.get(0) / 100) - 0.1);
     }
@@ -82,8 +82,8 @@ public class Platform {
             int rand1 = -1;
             int rand2 = -2;
             while (rand1 > rand2) {
-                rand1 = rand.nextInt(11, 100);
-                rand2 = rand.nextInt(11, rand1 + 6);
+                rand1 = rand.nextInt(11, 40);
+                rand2 = rand.nextInt(11, rand1 + 20);
             }
             ArrayList<Double> temp = new ArrayList<>();
             newrect.set(0,(double) rand1);
@@ -91,7 +91,7 @@ public class Platform {
             oldRectangle = new Rectangle(
                     root.getWidth() * newrect.get(0) / 100,
                     oldRectangle.getY(),
-                    root.getWidth() * newrect.get(1) / 100,
+                    root.getWidth() * (newrect.get(1)-newrect.get(0)) / 100,
                     oldRectangle.getY()
             );
 
@@ -105,7 +105,7 @@ public class Platform {
             int rand2 = -2;
             while (rand1 > rand2) {
                 rand1 = rand.nextInt(11, 100);
-                rand2 = rand.nextInt(11, rand1 + 6);
+                rand2 = rand.nextInt(11, rand1 + 20);
             }
             ArrayList<Double> temp = new ArrayList<>();
             newrect.set(0,(double) rand1);
@@ -113,7 +113,7 @@ public class Platform {
             newRectangle = new Rectangle(
                     root.getWidth() * newrect.get(0) / 100,
                     oldRectangle.getY(),
-                    root.getWidth() * newrect.get(1) / 100,
+                    root.getWidth() * (newrect.get(1)-newrect.get(0)) / 100,
                     oldRectangle.getY()
             );
 
@@ -130,8 +130,8 @@ public class Platform {
         this.count+=1;
         stickmangame.stickSpawned = false;
         stickmangame.isWalking = false;
-        stickmangame.stickman.resetPosition(stickmangame.platform);
         platform_distance = root.getWidth() * ((newrect.get(0) / 100) - 0.1);
+        stickmangame.stickman.resetPosition(stickmangame.platform,stickmangame);
     }
 
     public double getDistance() {
